@@ -1,0 +1,59 @@
+{
+  "name": "UpdateObject",
+  "displayName": "Update Object",
+  "description": "Update properties of an existing object in Desigo CC",
+  "operation": {
+    "method": "PATCH",
+    "uri": "/api/objects/{objectId}",
+    "summary": "Update object properties",
+    "operationId": "UpdateObject"
+  },
+  "parameters": [
+    {
+      "name": "objectId",
+      "type": "string",
+      "description": "The unique identifier of the object to update",
+      "required": true,
+      "in": "path"
+    },
+    {
+      "name": "Authorization",
+      "type": "string",
+      "description": "Bearer token for authentication",
+      "required": true,
+      "in": "header"
+    },
+    {
+      "name": "properties",
+      "type": "object",
+      "description": "Object properties to update",
+      "required": true,
+      "in": "body"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "New name for the object (optional)",
+      "required": false,
+      "in": "body"
+    }
+  ],
+  "responses": {
+    "200": {
+      "description": "Object updated successfully",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "objectId": {"type": "string"},
+          "updatedProperties": {"type": "object"},
+          "status": {"type": "string"}
+        }
+      }
+    },
+    "400": {"description": "Bad request - invalid properties"},
+    "401": {"description": "Unauthorized"},
+    "403": {"description": "Forbidden - insufficient permissions"},
+    "404": {"description": "Object not found"},
+    "500": {"description": "Internal server error"}
+  }
+}

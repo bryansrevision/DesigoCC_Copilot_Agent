@@ -1,0 +1,67 @@
+{
+  "name": "CreateObject",
+  "displayName": "Create Object",
+  "description": "Create a new object in Desigo CC system",
+  "operation": {
+    "method": "POST",
+    "uri": "/api/objects",
+    "summary": "Create a new object",
+    "operationId": "CreateObject"
+  },
+  "parameters": [
+    {
+      "name": "Authorization",
+      "type": "string",
+      "description": "Bearer token for authentication",
+      "required": true,
+      "in": "header"
+    },
+    {
+      "name": "objectType",
+      "type": "string",
+      "description": "Type of object to create",
+      "required": true,
+      "in": "body"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "Name of the new object",
+      "required": true,
+      "in": "body"
+    },
+    {
+      "name": "parentId",
+      "type": "string",
+      "description": "Parent object ID for hierarchy",
+      "required": false,
+      "in": "body"
+    },
+    {
+      "name": "properties",
+      "type": "object",
+      "description": "Object properties and configuration",
+      "required": false,
+      "in": "body"
+    }
+  ],
+  "responses": {
+    "201": {
+      "description": "Object created successfully",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "objectId": {"type": "string"},
+          "name": {"type": "string"},
+          "type": {"type": "string"},
+          "status": {"type": "string"}
+        }
+      }
+    },
+    "400": {"description": "Bad request - invalid object definition"},
+    "401": {"description": "Unauthorized"},
+    "403": {"description": "Forbidden - insufficient permissions"},
+    "409": {"description": "Conflict - object already exists"},
+    "500": {"description": "Internal server error"}
+  }
+}

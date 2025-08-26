@@ -1,0 +1,44 @@
+{
+  "name": "GetObjectValue",
+  "displayName": "Get Object Value",
+  "description": "Retrieve the current value of a specified object in Desigo CC",
+  "operation": {
+    "method": "GET",
+    "uri": "/api/objects/{objectId}/value",
+    "summary": "Get current value of an object",
+    "operationId": "GetObjectValue"
+  },
+  "parameters": [
+    {
+      "name": "objectId",
+      "type": "string",
+      "description": "The unique identifier of the object (e.g., 'Building.Floor1.AHU1.SAT')",
+      "required": true,
+      "in": "path"
+    },
+    {
+      "name": "Authorization",
+      "type": "string", 
+      "description": "Bearer token for authentication",
+      "required": true,
+      "in": "header"
+    }
+  ],
+  "responses": {
+    "200": {
+      "description": "Object value retrieved successfully",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "objectId": {"type": "string"},
+          "value": {"type": "number"},
+          "unit": {"type": "string"},
+          "timestamp": {"type": "string"}
+        }
+      }
+    },
+    "401": {"description": "Unauthorized - check authentication token"},
+    "404": {"description": "Object not found - verify object ID"},
+    "500": {"description": "Internal server error"}
+  }
+}

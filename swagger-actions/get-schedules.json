@@ -1,0 +1,70 @@
+{
+  "name": "GetSchedules",
+  "displayName": "Get Schedules",
+  "description": "Retrieve schedule information for objects in Desigo CC",
+  "operation": {
+    "method": "GET",
+    "uri": "/api/schedules",
+    "summary": "Get schedule information",
+    "operationId": "GetSchedules"
+  },
+  "parameters": [
+    {
+      "name": "objectId",
+      "type": "string",
+      "description": "Object ID to get schedules for (optional)",
+      "required": false,
+      "in": "query"
+    },
+    {
+      "name": "scheduleType",
+      "type": "string",
+      "description": "Type of schedule to filter",
+      "required": false,
+      "in": "query",
+      "enum": ["weekly", "daily", "exception", "all"]
+    },
+    {
+      "name": "active",
+      "type": "boolean",
+      "description": "Filter by active/inactive schedules",
+      "required": false,
+      "in": "query"
+    },
+    {
+      "name": "Authorization",
+      "type": "string",
+      "description": "Bearer token for authentication",
+      "required": true,
+      "in": "header"
+    }
+  ],
+  "responses": {
+    "200": {
+      "description": "Schedules retrieved successfully",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "schedules": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {"type": "string"},
+                "name": {"type": "string"},
+                "objectId": {"type": "string"},
+                "type": {"type": "string"},
+                "active": {"type": "boolean"},
+                "nextEvent": {"type": "string"},
+                "description": {"type": "string"}
+              }
+            }
+          }
+        }
+      }
+    },
+    "401": {"description": "Unauthorized"},
+    "404": {"description": "Object not found"},
+    "500": {"description": "Internal server error"}
+  }
+}

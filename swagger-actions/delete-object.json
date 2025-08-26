@@ -1,0 +1,61 @@
+{
+  "name": "DeleteObject",
+  "displayName": "Delete Object",
+  "description": "Delete an object from Desigo CC system (use with caution)",
+  "operation": {
+    "method": "DELETE",
+    "uri": "/api/objects/{objectId}",
+    "summary": "Delete an object",
+    "operationId": "DeleteObject"
+  },
+  "parameters": [
+    {
+      "name": "objectId",
+      "type": "string",
+      "description": "The unique identifier of the object to delete",
+      "required": true,
+      "in": "path"
+    },
+    {
+      "name": "Authorization",
+      "type": "string",
+      "description": "Bearer token for authentication",
+      "required": true,
+      "in": "header"
+    },
+    {
+      "name": "force",
+      "type": "boolean",
+      "description": "Force deletion even if object has dependencies",
+      "required": false,
+      "in": "query",
+      "default": false
+    },
+    {
+      "name": "recursive",
+      "type": "boolean",
+      "description": "Delete child objects as well",
+      "required": false,
+      "in": "query",
+      "default": false
+    }
+  ],
+  "responses": {
+    "200": {
+      "description": "Object deleted successfully",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "objectId": {"type": "string"},
+          "status": {"type": "string"},
+          "deletedChildren": {"type": "array", "items": {"type": "string"}}
+        }
+      }
+    },
+    "400": {"description": "Bad request - object has dependencies"},
+    "401": {"description": "Unauthorized"},
+    "403": {"description": "Forbidden - insufficient permissions"},
+    "404": {"description": "Object not found"},
+    "500": {"description": "Internal server error"}
+  }
+}
