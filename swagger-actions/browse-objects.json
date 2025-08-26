@@ -1,0 +1,78 @@
+{
+  "name": "BrowseObjects",
+  "displayName": "Browse Objects",
+  "description": "Browse and discover objects in Desigo CC hierarchy",
+  "operation": {
+    "method": "GET",
+    "uri": "/api/objects/browse",
+    "summary": "Browse object hierarchy",
+    "operationId": "BrowseObjects"
+  },
+  "parameters": [
+    {
+      "name": "parentId",
+      "type": "string",
+      "description": "Parent object ID to browse from (root if not specified)",
+      "required": false,
+      "in": "query"
+    },
+    {
+      "name": "objectType",
+      "type": "string",
+      "description": "Filter by object type",
+      "required": false,
+      "in": "query"
+    },
+    {
+      "name": "depth",
+      "type": "integer",
+      "description": "Maximum depth to browse (default: 1)",
+      "required": false,
+      "in": "query",
+      "default": 1
+    },
+    {
+      "name": "includeValues",
+      "type": "boolean",
+      "description": "Include current values in response",
+      "required": false,
+      "in": "query",
+      "default": false
+    },
+    {
+      "name": "Authorization",
+      "type": "string",
+      "description": "Bearer token for authentication",
+      "required": true,
+      "in": "header"
+    }
+  ],
+  "responses": {
+    "200": {
+      "description": "Objects browsed successfully",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "objects": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "objectId": {"type": "string"},
+                "name": {"type": "string"},
+                "type": {"type": "string"},
+                "hasChildren": {"type": "boolean"},
+                "value": {"type": "number"},
+                "unit": {"type": "string"}
+              }
+            }
+          },
+          "parentId": {"type": "string"}
+        }
+      }
+    },
+    "401": {"description": "Unauthorized"},
+    "404": {"description": "Parent object not found"},
+    "500": {"description": "Internal server error"}
+  }
+}

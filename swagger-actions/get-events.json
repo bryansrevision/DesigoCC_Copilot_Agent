@@ -1,0 +1,77 @@
+{
+  "name": "GetEvents",
+  "displayName": "Get Events",
+  "description": "Retrieve system events from Desigo CC event log",
+  "operation": {
+    "method": "GET",
+    "uri": "/api/events",
+    "summary": "Get system events",
+    "operationId": "GetEvents"
+  },
+  "parameters": [
+    {
+      "name": "startTime",
+      "type": "string",
+      "description": "Start time for event query (ISO 8601 format)",
+      "required": false,
+      "in": "query"
+    },
+    {
+      "name": "endTime",
+      "type": "string",
+      "description": "End time for event query (ISO 8601 format)",
+      "required": false,
+      "in": "query"
+    },
+    {
+      "name": "eventType",
+      "type": "string",
+      "description": "Event type filter",
+      "required": false,
+      "in": "query",
+      "enum": ["alarm", "command", "login", "system", "all"]
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "description": "Maximum number of events to return",
+      "required": false,
+      "in": "query",
+      "default": 100
+    },
+    {
+      "name": "Authorization",
+      "type": "string",
+      "description": "Bearer token for authentication",
+      "required": true,
+      "in": "header"
+    }
+  ],
+  "responses": {
+    "200": {
+      "description": "Events retrieved successfully",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "events": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {"type": "string"},
+                "timestamp": {"type": "string"},
+                "eventType": {"type": "string"},
+                "source": {"type": "string"},
+                "message": {"type": "string"},
+                "user": {"type": "string"}
+              }
+            }
+          },
+          "totalCount": {"type": "integer"}
+        }
+      }
+    },
+    "401": {"description": "Unauthorized"},
+    "500": {"description": "Internal server error"}
+  }
+}

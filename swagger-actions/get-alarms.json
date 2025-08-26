@@ -1,0 +1,71 @@
+{
+  "name": "GetAlarms",
+  "displayName": "Get Alarms",
+  "description": "Retrieve active alarms from Desigo CC",
+  "operation": {
+    "method": "GET",
+    "uri": "/api/alarms",
+    "summary": "Get active alarms",
+    "operationId": "GetAlarms"
+  },
+  "parameters": [
+    {
+      "name": "state",
+      "type": "string",
+      "description": "Alarm state filter (active, acknowledged, cleared)",
+      "required": false,
+      "in": "query",
+      "enum": ["active", "acknowledged", "cleared", "all"]
+    },
+    {
+      "name": "priority",
+      "type": "string",
+      "description": "Priority filter (high, medium, low)",
+      "required": false,
+      "in": "query",
+      "enum": ["high", "medium", "low"]
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "description": "Maximum number of alarms to return",
+      "required": false,
+      "in": "query",
+      "default": 100
+    },
+    {
+      "name": "Authorization",
+      "type": "string",
+      "description": "Bearer token for authentication",
+      "required": true,
+      "in": "header"
+    }
+  ],
+  "responses": {
+    "200": {
+      "description": "Alarms retrieved successfully",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "alarms": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {"type": "string"},
+                "objectId": {"type": "string"},
+                "message": {"type": "string"},
+                "priority": {"type": "string"},
+                "state": {"type": "string"},
+                "timestamp": {"type": "string"}
+              }
+            }
+          },
+          "totalCount": {"type": "integer"}
+        }
+      }
+    },
+    "401": {"description": "Unauthorized"},
+    "500": {"description": "Internal server error"}
+  }
+}

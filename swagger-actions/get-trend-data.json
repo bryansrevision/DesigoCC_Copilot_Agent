@@ -1,0 +1,73 @@
+{
+  "name": "GetTrendData",
+  "displayName": "Get Trend Data",
+  "description": "Retrieve historical trend data for specified objects",
+  "operation": {
+    "method": "GET",
+    "uri": "/api/trends",
+    "summary": "Get trend data for objects",
+    "operationId": "GetTrendData"
+  },
+  "parameters": [
+    {
+      "name": "objectIds",
+      "type": "string",
+      "description": "Comma-separated list of object IDs",
+      "required": true,
+      "in": "query"
+    },
+    {
+      "name": "startTime",
+      "type": "string",
+      "description": "Start time (ISO 8601 format)",
+      "required": true,
+      "in": "query"
+    },
+    {
+      "name": "endTime",
+      "type": "string",
+      "description": "End time (ISO 8601 format)",
+      "required": true,
+      "in": "query"
+    },
+    {
+      "name": "interval",
+      "type": "string",
+      "description": "Data interval (e.g., '1m', '5m', '1h')",
+      "required": false,
+      "in": "query",
+      "default": "5m"
+    },
+    {
+      "name": "Authorization",
+      "type": "string",
+      "description": "Bearer token for authentication",
+      "required": true,
+      "in": "header"
+    }
+  ],
+  "responses": {
+    "200": {
+      "description": "Trend data retrieved successfully",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "objectId": {"type": "string"},
+                "timestamp": {"type": "string"},
+                "value": {"type": "number"}
+              }
+            }
+          }
+        }
+      }
+    },
+    "400": {"description": "Bad request - invalid time range or parameters"},
+    "401": {"description": "Unauthorized"},
+    "500": {"description": "Internal server error"}
+  }
+}
