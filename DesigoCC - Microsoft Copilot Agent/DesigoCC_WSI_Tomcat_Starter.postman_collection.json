@@ -1,0 +1,373 @@
+{
+  "info": {
+    "name": "Desigo CC WSI & Reporting \u2014 Starter Collection",
+    "_postman_id": "068c9536-4329-40fb-9eec-64a2c4d72354",
+    "description": "Parameterised Postman collection for Siemens Desigo CC Web Service Interface (WSI) and Advanced Reporting (Tomcat). Use with the provided environment.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "00 \u2014 Auth",
+      "item": [
+        {
+          "name": "Token: Login (if OAuth/Bearer is configured)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/auth/token",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\": \"{{username}}\", \"password\": \"{{password}}\"}"
+            },
+            "description": "Example token endpoint. If your deployment uses Basic auth to WSI, skip this and set an Authorization header on each request."
+          },
+          "response": []
+        },
+        {
+          "name": "Token: Refresh",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/auth/refresh",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"refresh_token\": \"{{refresh_token}}\"}"
+            },
+            "description": "Refresh token flow (if available)."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "10 \u2014 System & Health",
+      "item": [
+        {
+          "name": "WSI: Service Info",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{authHeader}}"
+              }
+            ],
+            "url": "{{baseUrl}}/wsi/info",
+            "description": "Returns WSI version/service state if supported on your build."
+          },
+          "response": []
+        },
+        {
+          "name": "WSI: Ping",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{authHeader}}"
+              }
+            ],
+            "url": "{{baseUrl}}/wsi/ping",
+            "description": "Simple health check (if exposed). Otherwise use 'Service Info'."
+          },
+          "response": []
+        },
+        {
+          "name": "Swagger UI",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/swagger/",
+            "description": "Opens Swagger UI if enabled on the WSI site."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "20 \u2014 Objects & Values",
+      "item": [
+        {
+          "name": "Browse: Children by Path",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{authHeader}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/wsi/objects/{{path}}/children?depth={{depth}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "wsi",
+                "objects",
+                "{{path}}",
+                "children"
+              ],
+              "query": [
+                {
+                  "key": "depth",
+                  "value": "{{depth}}"
+                }
+              ]
+            },
+            "description": "List children under an object path. Example path: AHU1"
+          },
+          "response": []
+        },
+        {
+          "name": "Read: Object Value",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{authHeader}}"
+              }
+            ],
+            "url": "{{baseUrl}}/wsi/objects/{{path}}/value",
+            "description": "Reads current value. Example path: AHU1.SAT"
+          },
+          "response": []
+        },
+        {
+          "name": "Write: Object Value",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{authHeader}}"
+              }
+            ],
+            "url": "{{baseUrl}}/wsi/objects/{{path}}/value",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"value\": \"{{write_value}}\"}"
+            },
+            "description": "Writes a value to an object (permissions required)."
+          },
+          "response": []
+        },
+        {
+          "name": "Metadata: Object Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{authHeader}}"
+              }
+            ],
+            "url": "{{baseUrl}}/wsi/objects/{{path}}",
+            "description": "Returns object metadata (type, properties)."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "30 \u2014 Alarms & Events",
+      "item": [
+        {
+          "name": "Events: Recent",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{authHeader}}"
+              }
+            ],
+            "url": "{{baseUrl}}/wsi/events?limit={{limit}}&since={{since}}",
+            "description": "Fetch recent events/alarms. Provide ISO 8601 'since' if supported."
+          },
+          "response": []
+        },
+        {
+          "name": "Events: Acknowledge",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{authHeader}}"
+              }
+            ],
+            "url": "{{baseUrl}}/wsi/events/{{event_id}}/ack",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"note\": \"Acknowledged via Postman\"}"
+            },
+            "description": "Acknowledge an event (if enabled)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "40 \u2014 Trends & Reporting",
+      "item": [
+        {
+          "name": "Trends: Read Series",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{authHeader}}"
+              }
+            ],
+            "url": "{{baseUrl}}/wsi/trends/{{path}}?from={{from}}&to={{to}}&interval={{interval}}",
+            "description": "Retrieve trended data for an object/point if exposed via WSI."
+          },
+          "response": []
+        },
+        {
+          "name": "Tomcat: BIRT Viewer",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{reportBase}}/birt/",
+            "description": "Opens Advanced Reporting (Tomcat 9.x) BIRT viewer."
+          },
+          "response": []
+        },
+        {
+          "name": "Tomcat: Run Report (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{reportBase}}/birt/preview?__report={{reportName}}&param1={{param1}}",
+            "description": "Simple GET preview of a report with example parameter."
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://your-desigocc-host:8443"
+    },
+    {
+      "key": "reportBase",
+      "value": "http://your-desigocc-host:18080"
+    },
+    {
+      "key": "username",
+      "value": "svc.desigocc"
+    },
+    {
+      "key": "password",
+      "value": "<secret>"
+    },
+    {
+      "key": "refresh_token",
+      "value": "<refresh_token_if_any>"
+    },
+    {
+      "key": "authHeader",
+      "value": "Bearer {{token}}"
+    },
+    {
+      "key": "token",
+      "value": "<paste_token_here>"
+    },
+    {
+      "key": "path",
+      "value": "AHU1.SAT"
+    },
+    {
+      "key": "depth",
+      "value": "1"
+    },
+    {
+      "key": "write_value",
+      "value": "72.5"
+    },
+    {
+      "key": "limit",
+      "value": "50"
+    },
+    {
+      "key": "since",
+      "value": "2025-08-01T00:00:00Z"
+    },
+    {
+      "key": "event_id",
+      "value": "<event-guid>"
+    },
+    {
+      "key": "from",
+      "value": "2025-08-01T00:00:00Z"
+    },
+    {
+      "key": "to",
+      "value": "2025-08-26T00:00:00Z"
+    },
+    {
+      "key": "interval",
+      "value": "15m"
+    },
+    {
+      "key": "reportName",
+      "value": "Samples/YourReport.rptdesign"
+    },
+    {
+      "key": "param1",
+      "value": "value"
+    }
+  ]
+}
