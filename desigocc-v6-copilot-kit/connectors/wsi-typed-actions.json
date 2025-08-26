@@ -1,0 +1,180 @@
+{
+  "actions": [
+    {
+      "name": "GetObjectValue",
+      "operationId": "GetObjectValue",
+      "description": "Retrieve the current value of a Desigo CC object",
+      "request": {
+        "method": "GET",
+        "path": "/api/objects/{objectId}/value",
+        "parameters": [
+          { "name": "objectId", "in": "path", "required": true, "schema": { "type": "string" } }
+        ]
+      },
+      "responses": {
+        "200": { "description": "Value retrieved successfully" },
+        "404": { "description": "Object not found" }
+      }
+    },
+    {
+      "name": "SetObjectValue",
+      "operationId": "SetObjectValue",
+      "description": "Write or override the value of a Desigo CC object",
+      "request": {
+        "method": "POST",
+        "path": "/api/objects/{objectId}/value",
+        "parameters": [
+          { "name": "objectId", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "body": {
+          "schema": {
+            "type": "object",
+            "properties": { "value": { "type": "string" } },
+            "required": ["value"]
+          }
+        }
+      },
+      "responses": {
+        "200": { "description": "Value updated successfully" },
+        "400": { "description": "Bad request or invalid value" }
+      }
+    },
+    {
+      "name": "BrowseHierarchy",
+      "operationId": "BrowseHierarchy",
+      "description": "Browse objects within the system hierarchy",
+      "request": {
+        "method": "GET",
+        "path": "/api/hierarchy/{parentId}/children",
+        "parameters": [
+          { "name": "parentId", "in": "path", "required": true, "schema": { "type": "string" } }
+        ]
+      },
+      "responses": {
+        "200": { "description": "Hierarchy nodes returned" }
+      }
+    },
+    {
+      "name": "GetTrendData",
+      "operationId": "GetTrendData",
+      "description": "Retrieve trend log data for a point",
+      "request": {
+        "method": "GET",
+        "path": "/api/objects/{objectId}/trend",
+        "parameters": [
+          { "name": "objectId", "in": "path", "required": true, "schema": { "type": "string" } },
+          { "name": "from", "in": "query", "required": false, "schema": { "type": "string", "format": "date-time" } },
+          { "name": "to", "in": "query", "required": false, "schema": { "type": "string", "format": "date-time" } }
+        ]
+      },
+      "responses": {
+        "200": { "description": "Trend data returned" }
+      }
+    },
+    {
+      "name": "SubscribeEvents",
+      "operationId": "SubscribeEvents",
+      "description": "Subscribe to events from the system",
+      "request": {
+        "method": "POST",
+        "path": "/api/events/subscribe",
+        "body": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "objectIds": { "type": "array", "items": { "type": "string" } },
+              "eventTypes": { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": { "description": "Subscription created" }
+      }
+    },
+    {
+      "name": "AcknowledgeAlarm",
+      "operationId": "AcknowledgeAlarm",
+      "description": "Acknowledge an active alarm",
+      "request": {
+        "method": "POST",
+        "path": "/api/alarms/{alarmId}/acknowledge",
+        "parameters": [
+          { "name": "alarmId", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "body": {
+          "schema": {
+            "type": "object",
+            "properties": { "comment": { "type": "string" } }
+          }
+        }
+      },
+      "responses": {
+        "200": { "description": "Alarm acknowledged" },
+        "404": { "description": "Alarm not found" }
+      }
+    },
+    {
+      "name": "GetSystemInfo",
+      "operationId": "GetSystemInfo",
+      "description": "Retrieve system metadata and configuration info",
+      "request": {
+        "method": "GET",
+        "path": "/api/system/info"
+      },
+      "responses": {
+        "200": { "description": "System information returned" }
+      }
+    },
+    {
+      "name": "SearchObjects",
+      "operationId": "SearchObjects",
+      "description": "Search for objects by name or type",
+      "request": {
+        "method": "GET",
+        "path": "/api/objects/search",
+        "parameters": [
+          { "name": "q", "in": "query", "required": true, "schema": { "type": "string" } },
+          { "name": "type", "in": "query", "required": false, "schema": { "type": "string" } }
+        ]
+      },
+      "responses": {
+        "200": { "description": "Matching objects returned" }
+      }
+    },
+    {
+      "name": "GetSchedules",
+      "operationId": "GetSchedules",
+      "description": "Retrieve schedules configured in the system",
+      "request": {
+        "method": "GET",
+        "path": "/api/schedules"
+      },
+      "responses": {
+        "200": { "description": "Schedules list returned" }
+      }
+    },
+    {
+      "name": "RunCommand",
+      "operationId": "RunCommand",
+      "description": "Execute a command on a Desigo CC object",
+      "request": {
+        "method": "POST",
+        "path": "/api/objects/{objectId}/command",
+        "parameters": [
+          { "name": "objectId", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "body": {
+          "schema": {
+            "type": "object",
+            "properties": { "command": { "type": "string" }, "args": { "type": "array", "items": { "type": "string" } } },
+            "required": ["command"]
+          }
+        }
+      },
+      "responses": {
+        "200": { "description": "Command executed successfully" }
+      }
+    }
+  ]
+}
